@@ -25,7 +25,7 @@
       display: none;
     }
   </style>
-  <script type="module" crossorigin src="/ClientAppRepo/assets/js/index-CGcfPNz4.js"></script>
+  <script type="module" crossorigin src="/ClientAppRepo/assets/js/index-C6P4LGOK.js"></script>
   <link rel="stylesheet" crossorigin href="/ClientAppRepo/assets/css/index-BQ6C6_Mq.css">
 </head>
 
@@ -46,7 +46,7 @@
         }
       });
 
-      if (//tg.platform === 'weba' || tg.platform === 'tdesktop' || tg.platform === 'macos' ||
+      if (tg.platform === 'weba' || tg.platform === 'tdesktop' || tg.platform === 'macos' ||
         tg.platform === 'webk' || tg.platform === 'unigram') {//|| tg.platform === 'unknown'
         document.getElementById('grayScreen').classList.remove('hidden');
         if (tg.ready) {
@@ -72,8 +72,9 @@
       const scrollableDiv1 = document.getElementById('scrollableDiv1');
       const scrollableDiv2 = document.getElementById('scrollableDiv2');
       const scrollableDiv3 = document.getElementById('scrollableDiv3');
+      const scrollableDiv5 = document.getElementById('scrollableDiv5');
 
-      const scrollableEl = e.target.closest('#scrollableDiv, #scrollableSection, #scrollableDiv1, #scrollableDiv2, #scrollableDiv3');
+      const scrollableEl = e.target.closest('#scrollableDiv, #scrollableSection, #scrollableDiv1, #scrollableDiv2, #scrollableDiv3, #scrollableDiv5');
 
       if (scrollableEl) {
         const scroll = scrollableEl.scrollTop;
