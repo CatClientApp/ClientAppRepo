@@ -20,19 +20,64 @@
       width: 100%;
       z-index: 9999;
     }
-
+    .modal-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
     .hidden {
       display: none;
     }
+    .modal-content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      margin: auto;
+    }
+    .modal-content p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    #joinGroupButton {
+      background-color: #0088cc;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #joinGroupButton:hover {
+      background-color: #006699;
+    }
   </style>
-  <script type="module" crossorigin src="/ClientAppRepo/assets/js/index-HFOGbMFU.js"></script>
-  <link rel="stylesheet" crossorigin href="/ClientAppRepo/assets/css/index-D4EsGRuV.css">
+  <script type="module" crossorigin src="/ClientAppRepo/assets/js/index-BUSCO_a3.js"></script>
+  <link rel="stylesheet" crossorigin href="/ClientAppRepo/assets/css/index--rhAypvw.css">
 </head>
 
 <body class="min-h-screen h-screen overflow-hidden">
   <div id="root"></div>
   <div id="grayScreen" class="gray-screen hidden">
     <img src="/ClientAppRepo/assets/img/Kutak-DLtjJHXd.png" alt="Kutak">
+  </div>
+  <!-- Модальное окно -->
+  <div id="membershipModal" class="modal-background hidden">
+    <div class="modal-content">
+      <p>To play, you need to subscribe to the group.</p>
+      <button id="joinGroupButton">Join the group</button>
+    </div>
   </div>
   <script>
     let tg = window.Telegram.WebApp;
@@ -45,15 +90,6 @@
         if (event.isStateStable) {
         }
       });
-
-      if (tg.platform === 'weba' || tg.platform === 'tdesktop' || tg.platform === 'macos' ||
-        tg.platform === 'webk' || tg.platform === 'unigram') {//|| tg.platform === 'unknown'
-        document.getElementById('grayScreen').classList.remove('hidden');
-        if (tg.ready) {
-          document.getElementById('root').classList.add('hidden');
-        }
-      }
-
     }
     const overflow = 100;
     document.body.style.overflowY = 'hidden';
@@ -93,21 +129,35 @@
     tg.expand();
   </script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const inviteButton = document.getElementById('inviteButton');
-      if (inviteButton) {
-        inviteButton.addEventListener('click', function () {
-          const inviteUrl = 'https://t.me/catAppMotion_bot??start=invite';
-          if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.openTelegramLink(inviteUrl);
-          } else {
-            window.open(inviteUrl, '_blank');
-          }
+    document.addEventListener('DOMContentLoaded', async function () {
+      const urlWindow = window.location.href;
+      const url = new URL(urlWindow);
+      const params = new URLSearchParams(url.search);
+      const userIdFromUrl = params.get('user_id');
+      console.log(userIdFromUrl);
+
+      if (userIdFromUrl) {
+        const response = await fetch('https://tg.catserver-production.com/cattg/check_membership', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Origin': window.location.origin,
+          },
+          body: JSON.stringify({ user_id: userIdFromUrl, chat_id: "@catapcommunity" }),
         });
+
+        const result = await response.json();
+        console.log(result);
+        let tg = window.Telegram.WebApp;
+        if (!result.is_member) {
+          document.getElementById('membershipModal').classList.remove('hidden');
+          document.getElementById('joinGroupButton').addEventListener('click', () => {
+            tg.openTelegramLink('https://t.me/@catapcommunity');
+          });
+        }
       }
     });
   </script>
-
 </body>
 
 </html>
