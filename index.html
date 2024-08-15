@@ -128,36 +128,6 @@
     document.documentElement.addEventListener('touchmove', onTouchMove, { passive: false });
     tg.expand();
   </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-      const urlWindow = window.location.href;
-      const url = new URL(urlWindow);
-      const params = new URLSearchParams(url.search);
-      const userIdFromUrl = params.get('user_id');
-      console.log(userIdFromUrl);
-
-      if (userIdFromUrl) {
-        const response = await fetch('https://tg.catserver-production.com/cattg/check_membership', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Origin': window.location.origin,
-          },
-          body: JSON.stringify({ user_id: userIdFromUrl, chat_id: "@catapcommunity" }),
-        });
-
-        const result = await response.json();
-        console.log(result);
-        let tg = window.Telegram.WebApp;
-        if (!result.is_member) {
-          document.getElementById('membershipModal').classList.remove('hidden');
-          document.getElementById('joinGroupButton').addEventListener('click', () => {
-            tg.openTelegramLink('https://t.me/@catapcommunity');
-          });
-        }
-      }
-    });
-  </script>
 </body>
 
 </html>
